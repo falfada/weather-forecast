@@ -18,18 +18,18 @@
   </head>
   <body>
     <main id="weather_container">
-      <h1 class="text-center pt-4 fw-bolder text-white">Weather Dashboard</h1>
+      <h1 class="text-center pt-4 fw-bolder">Weather Dashboard</h1>
       <div class="container">
         <div class="row pt-4 justify-content-around align-items-start">
           <aside class="col-3 glass_container rounded-3 p-3">
             <form id="searchCity">
-              <label for="city" class="fs-3 text-white">Search for a City:</label>
+              <label for="city" class="fs-3">Search for a City:</label>
               <input type="text" class="form-control" id="city" />
               <button type="submit" class="btn btn-primary mt-2 col-12">
                 Search
               </button>
             </form>
-            <article id="citiesContainer" class="mt-4">
+            <!-- <article id="citiesContainer" class="mt-4">
               <button class="btn btn-light d-block mt-1 col-12">
                 City 2
               </button>
@@ -39,10 +39,10 @@
               <button class="btn btn-light d-block mt-1 col-12">
                 City 4
               </button>
-            </article>
+            </article> -->
           </aside>
-          <section class="col-8">
-            <article
+          <section class="col-8" id="forecastContainer">
+            <!-- <article
               class="col-12 p-4 glass_container rounded-3 row shadow text-white"
               id="weatherToday"
             >
@@ -177,7 +177,7 @@
                   <p class="m-0">xx%</p>
                 </div>
               </div>
-            </article>
+            </article> -->
           </section>
         </div>
       </div>

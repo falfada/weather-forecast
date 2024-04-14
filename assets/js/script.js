@@ -14,15 +14,32 @@ function searchCity(event) {
         const apiDate = dayjs(data.list[0].dt_txt);
         const apiCity = data.city.name;
 
+        // Changing the background depending on the weather info
         let weatherInfo = data.list[0].weather[0].main;
-        console.log(weatherInfo);
+        const weatherContainer = document.getElementById("weather_container");
+        weatherContainer.setAttribute("class", "text-white");
 
+        if(weatherInfo === 'Thunderstorm'){
+          weatherContainer.style.backgroundImage = "url('../assets/img/thunderstorm.jpg')";
+        } else if(weatherInfo === 'Drizzle'){
+          weatherContainer.style.backgroundImage = "url('../assets/img/drizzle.jpg')";
+        } else if(weatherInfo === 'Rain'){
+          weatherContainer.style.backgroundImage = "url('../assets/img/rain.jpg')";
+        } else if(weatherInfo === 'Snow'){
+          weatherContainer.style.backgroundImage = "url('../assets/img/snow.jpg')";
+        } else if(weatherInfo === 'Clear'){
+          weatherContainer.style.backgroundImage = "url('../assets/img/clear.jpg')";
+        } else{
+          weatherContainer.style.backgroundImage = "url('../assets/img/clouds.jpg')";
+        }
 
+        // Creating the next five days for the forecast
         for (let i = 0; i <= 5; i++) {
           let nextDay = apiDate.add(i, "day");
           let nextDayNewFormat = nextDay.format("DD/MM/YYYY");
           let foundMatch = false;
 
+          // Looping through the data array to check if it matches to 5-day forecast
           for (let j = 0; j < data.list.length; j++) {
             let apiDateItem = data.list[j].dt_txt;
             let apiDateItemNewFormat = dayjs(apiDateItem).format("DD/MM/YYYY");
@@ -34,11 +51,7 @@ function searchCity(event) {
               const windSpeed = dataList.wind.speed;
               const iconWeather = `https://openweathermap.org/img/wn/${dataList.weather[0].icon}.png`;
 
-              console.log(
-                `The temperature in ${apiCity} on ${apiDateItemNewFormat} is ${temperature}C, the humidity is ${humidity}% and the wind speed is ${windSpeed}m/s`
-              );
-
-              console.log(iconWeather);
+              
               foundMatch = true;
             }
           }
