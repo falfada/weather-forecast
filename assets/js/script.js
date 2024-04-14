@@ -1,25 +1,48 @@
+let cities = JSON.parse(localStorage.getItem("cities"));
 const cityForm = document.getElementById("searchCity");
 const forecastContainer = document.getElementById("forecastContainer");
 const citiesContainer = document.getElementById("citiesContainer");
 
-// Creates the button
+function localStorageSave(data, city) {
+  let citiesArray;
+  if (!cities) {
+      citiesArray = [];
+  } else {
+      citiesArray = cities.slice();
+  }
+
+  for(let i = 0; i < data.length; i++){
+    let newCity = {
+      city: city,
+      date: dayjs(data[i].dt_txt),
+      cityTemp : Math.round(data[i].main.temp),
+      cityWind: data[i].wind.speed,
+      cityHumidity: data[i].main.humidity,
+      cityIcon: `https://openweathermap.org/img/wn/${data[i].weather[0].icon}.png`,
+    }
+    citiesArray.push(newCity);
+ 
+  }
+
+  localStorage.setItem("cities", JSON.stringify(citiesArray));
+}
 function createCityButton(city) {
   const cityButton = document.createElement("button");
   cityButton.classList.add("btn", "btn-light", "mt-1", "col-12");
-  cityButton.setAttribute('data-city', city);
+  cityButton.setAttribute("data-city", city);
   cityButton.textContent = `${city}`;
 
   citiesContainer.appendChild(cityButton);
 }
 function displayInfo(cityArray, city) {
   // Checking and Reseting Forecast Container
-  if(forecastContainer.hasAttribute('data-city')){
-    forecastContainer.setAttribute('data-city', '');
-    forecastContainer.innerHTML = '';
+  if (forecastContainer.hasAttribute("data-city")) {
+    forecastContainer.setAttribute("data-city", "");
+    forecastContainer.innerHTML = "";
   }
 
   // Setting City Attribute
-  forecastContainer.setAttribute('data-city', city);
+  forecastContainer.setAttribute("data-city", city);
 
   // Changing the background depending on the weather info
   let weatherInfo = cityArray[0].weather[0].main;
@@ -126,7 +149,7 @@ function displayInfo(cityArray, city) {
     <p class="m-0">${forecastHumidity}%</p>
   </div>`;
 
-  fiveDayContainer.appendChild(forecastDailyContainer);
+    fiveDayContainer.appendChild(forecastDailyContainer);
   }
 }
 function searchCity(event) {
@@ -170,9 +193,11 @@ function searchCity(event) {
         // Display info
         displayInfo(cityArray, apiCity);
 
-        // Saves the information to localStorage
+        // Saving the information to localStorage
+        localStorageSave(cityArray, apiCity);
 
         // Empty input value
+        document.getElementById("city").value = "";
       });
   }
 }
