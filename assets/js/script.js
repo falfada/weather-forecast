@@ -14,30 +14,29 @@ function searchCity(event) {
         const apiDate = dayjs(data.list[0].dt_txt);
 
         for (let i = 0; i <= 5; i++) {
-          let nextDay = apiDate.add([i], "day");
-          let nextDayNewFormat = nextDay.format("DD-MM-YYYY 21:00:00");
+          let nextDay = apiDate.add(i, "day");
+          let nextDayNewFormat = nextDay.format("DD/MM/YYYY");
+          let foundMatch = false;
 
           for (let j = 0; j < data.list.length; j++) {
-
             let apiDateItem = data.list[j].dt_txt;
-            let apiDateItemNewFormat = dayjs(apiDateItem).format(
-              "DD-MM-YYYY HH:mm:ss"
-            );
+            let apiDateItemNewFormat = dayjs(apiDateItem).format("DD/MM/YYYY");
 
-            const dataList = data.list[j];
-            const humidity = dataList.main.humidity;
-            const temperature = dataList.main.temp;
-            const windSpeed = dataList.wind.speed;
-            const iconWeather = ` https://openweathermap.org/img/wn/${dataList.weather[0].icon}.png`;
+            if (apiDateItemNewFormat === nextDayNewFormat && !foundMatch) {
+              const dataList = data.list[j];
+              const humidity = dataList.main.humidity;
+              const temperature = dataList.main.temp;
+              const windSpeed = dataList.wind.speed;
+              const iconWeather = `https://openweathermap.org/img/wn/${dataList.weather[0].icon}.png`;
 
-            if (apiDateItemNewFormat === nextDayNewFormat) {
               console.log(
                 `The temperature in ${city} on ${apiDateItemNewFormat} is ${temperature}C, the humidity is ${humidity}% and the wind speed is ${windSpeed}m/s`
               );
+
+              foundMatch = true;
             }
           }
         }
-
       });
   }
 }
