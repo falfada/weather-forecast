@@ -12,6 +12,11 @@ function searchCity(event) {
       })
       .then(function (data) {
         const apiDate = dayjs(data.list[0].dt_txt);
+        const apiCity = data.city.name;
+
+        let weatherInfo = data.list[0].weather[0].main;
+        console.log(weatherInfo);
+
 
         for (let i = 0; i <= 5; i++) {
           let nextDay = apiDate.add(i, "day");
@@ -30,9 +35,10 @@ function searchCity(event) {
               const iconWeather = `https://openweathermap.org/img/wn/${dataList.weather[0].icon}.png`;
 
               console.log(
-                `The temperature in ${city} on ${apiDateItemNewFormat} is ${temperature}C, the humidity is ${humidity}% and the wind speed is ${windSpeed}m/s`
+                `The temperature in ${apiCity} on ${apiDateItemNewFormat} is ${temperature}C, the humidity is ${humidity}% and the wind speed is ${windSpeed}m/s`
               );
 
+              console.log(iconWeather);
               foundMatch = true;
             }
           }

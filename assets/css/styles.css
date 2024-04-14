@@ -1,0 +1,46 @@
+#weather_container{
+    width: 100%;
+    height: 100vh;
+    background: url('../img/snow.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center top;
+}
+.glass_container {
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+.fs_temperature{
+    font-size: 5rem;
+    position: relative;
+    display: inline-block;
+}
+
+.fs_temperature::after{
+    content: 'C°';
+    position: absolute;
+    top: 2rem;
+    right: -1.5rem;
+    font-size: 1rem;
+}
+#forecast{
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+}
+
+.forecast_temperature{
+    font-size: 2rem;
+    position: relative;
+    display: inline-block;
+    margin: 0;
+}
+
+.forecast_temperature::after{
+    content: 'C°';
+    position: absolute;
+    top: .5rem;
+    right: -1rem;
+    font-size: .8rem;
+}
