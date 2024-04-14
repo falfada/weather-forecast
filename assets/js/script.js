@@ -3,7 +3,7 @@ const cityForm = document.getElementById("searchCity");
 const forecastContainer = document.getElementById("forecastContainer");
 const citiesContainer = document.getElementById("citiesContainer");
 
-function localStorageSave(data, city) {
+function localStorageSave(data) {
   let citiesArray;
   if (!cities) {
       citiesArray = [];
@@ -13,12 +13,13 @@ function localStorageSave(data, city) {
 
   for(let i = 0; i < data.length; i++){
     let newCity = {
-      city: city,
-      date: dayjs(data[i].dt_txt),
-      cityTemp : Math.round(data[i].main.temp),
-      cityWind: data[i].wind.speed,
-      cityHumidity: data[i].main.humidity,
-      cityIcon: `https://openweathermap.org/img/wn/${data[i].weather[0].icon}.png`,
+      city: data[0].city,
+      date: dayjs(data[i].date),
+      temp : Math.round(data[i].temp),
+      wind: data[i].wind,
+      humidity: data[i].humidity,
+      icon: data[i].icon,
+      weatherInfo: data[i].weatherInfo,
     }
     citiesArray.push(newCity);
  
@@ -34,7 +35,7 @@ function createCityButton(city) {
 
   citiesContainer.appendChild(cityButton);
 }
-function displayInfo(cityArray, city) {
+function displayInfo(cityArray) {
   // Checking and Reseting Forecast Container
   if (forecastContainer.hasAttribute("data-city")) {
     forecastContainer.setAttribute("data-city", "");
@@ -42,10 +43,10 @@ function displayInfo(cityArray, city) {
   }
 
   // Setting City Attribute
-  forecastContainer.setAttribute("data-city", city);
+  forecastContainer.setAttribute("data-city", cityArray[0].city);
 
   // Changing the background depending on the weather info
-  let weatherInfo = cityArray[0].weather[0].main;
+  const weatherInfo = cityArray[0].weatherInfo;
   const weatherContainer = document.getElementById("weather_container");
   weatherContainer.setAttribute("class", "text-white");
 
@@ -65,11 +66,11 @@ function displayInfo(cityArray, city) {
   }
 
   // Creating Current Day Container
-  const todayTemp = Math.round(cityArray[0].main.temp);
-  const todayDate = dayjs(cityArray[0].dt_txt).format("ddd D MMM YYYY");
-  const todayIconWeather = `https://openweathermap.org/img/wn/${cityArray[0].weather[0].icon}.png`;
-  const todayWindSpeed = cityArray[0].wind.speed;
-  const todayHumidity = cityArray[0].main.humidity;
+  const todayTemp = Math.round(cityArray[0].temp);
+  const todayDate = dayjs(cityArray.date).format("ddd D MMM YYYY");
+  const todayIconWeather = cityArray[0].icon;
+  const todayWindSpeed = cityArray[0].wind;
+  const todayHumidity = cityArray[0].humidity;
 
   const currentDayContainer = document.createElement("article");
   currentDayContainer.classList.add(
@@ -81,7 +82,7 @@ function displayInfo(cityArray, city) {
     "shadow"
   );
   currentDayContainer.innerHTML = `<div class="col-7">
-  <h2 class="m-0">${city}</h2>
+  <h2 class="m-0">${cityArray[0].city}</h2>
   <p class="m-0">${todayDate}</p>
   <p class="fw-bold fs_temperature">${todayTemp}</p>
 </div>`;
@@ -123,11 +124,11 @@ function displayInfo(cityArray, city) {
 
   // Looping through the 5-day forecast to create each container
   for (let i = 1; i < cityArray.length; i++) {
-    let forecastDate = dayjs(cityArray[i].dt_txt).format("ddd D MMM");
-    let forecastTemp = Math.round(cityArray[i].main.temp);
-    let forecastIconWeather = `https://openweathermap.org/img/wn/${cityArray[i].weather[0].icon}.png`;
-    let forecastWindSpeed = cityArray[i].wind.speed;
-    let forecastHumidity = cityArray[i].main.humidity;
+    let forecastDate = dayjs(cityArray[i].date).format("ddd D MMM");
+    let forecastTemp = Math.round(cityArray[i].temp);
+    let forecastIconWeather = cityArray[i].icon;
+    let forecastWindSpeed = cityArray[i].wind;
+    let forecastHumidity = cityArray[i].humidity;
 
     // Creating each container for the forecast
     const forecastDailyContainer = document.createElement("div");
@@ -180,21 +181,29 @@ function searchCity(event) {
             let apiDateItemNewFormat = dayjs(apiDateItem).format("DD/MM/YYYY");
 
             if (apiDateItemNewFormat === nextDayNewFormat && !foundMatch) {
-              cityArray.push(data.list[j]);
+              let newCity = {
+                city: apiCity,
+                date: dayjs(data.list[j].dt_txt),
+                temp: Math.round(data.list[j].main.temp),
+                wind: data.list[j].wind.speed,
+                humidity: data.list[j].main.humidity,
+                icon: `https://openweathermap.org/img/wn/${data.list[j].weather[0].icon}.png`,
+                weatherInfo: data.list[j].weather[0].main,
+              }
+              cityArray.push(newCity);
 
               foundMatch = true;
             }
           }
         }
-
         // Creates the city button
         createCityButton(apiCity);
 
         // Display info
-        displayInfo(cityArray, apiCity);
+        displayInfo(cityArray);
 
         // Saving the information to localStorage
-        localStorageSave(cityArray, apiCity);
+        localStorageSave(cityArray);
 
         // Empty input value
         document.getElementById("city").value = "";
@@ -206,15 +215,27 @@ function renderCities(){
   if(!cities){
     return [];
   }
- for(let i = 0; i <= cities.length; i+= 6){
+ for(let i = 0; i < cities.length; i+= 6){
   createCityButton(cities[i].city);
  }
+}
+function displayCity(event){
+  const city = event.target.getAttribute('data-city');
+  console.log(cities);
+
+  const filteredCities = cities.filter(item => item.city === city);
+console.log(filteredCities);
+  displayInfo(filteredCities);
 }
 
 cityForm.addEventListener("submit", searchCity);
 
 // Handle displaying the information when clicking the city button
-
+citiesContainer.addEventListener("click", function(event){
+  if(event.target.classList.contains('btn-light')){
+    displayCity(event);
+  }
+});
 
 // Render the City Buttons stored from localStorage
 renderCities();
