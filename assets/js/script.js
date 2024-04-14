@@ -6,11 +6,21 @@ const citiesContainer = document.getElementById("citiesContainer");
 function createCityButton(city) {
   const cityButton = document.createElement("button");
   cityButton.classList.add("btn", "btn-light", "mt-1", "col-12");
+  cityButton.setAttribute('data-city', city);
   cityButton.textContent = `${city}`;
 
   citiesContainer.appendChild(cityButton);
 }
 function displayInfo(cityArray, city) {
+  // Checking and Reseting Forecast Container
+  if(forecastContainer.hasAttribute('data-city')){
+    forecastContainer.setAttribute('data-city', '');
+    forecastContainer.innerHTML = '';
+  }
+
+  // Setting City Attribute
+  forecastContainer.setAttribute('data-city', city);
+
   // Changing the background depending on the weather info
   let weatherInfo = cityArray[0].weather[0].main;
   const weatherContainer = document.getElementById("weather_container");
