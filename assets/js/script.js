@@ -202,8 +202,19 @@ function searchCity(event) {
   }
 }
 
+function renderCities(){
+  if(!cities){
+    return [];
+  }
+ for(let i = 0; i <= cities.length; i+= 6){
+  createCityButton(cities[i].city);
+ }
+}
+
 cityForm.addEventListener("submit", searchCity);
 
-// Handle  display the information click when clicking the city button
+// Handle displaying the information when clicking the city button
 
-// Render the info stored from localStorage
+
+// Render the City Buttons stored from localStorage
+renderCities();
