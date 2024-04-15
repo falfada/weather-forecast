@@ -11,18 +11,17 @@ function localStorageSave(data) {
       citiesArray = cities.slice();
   }
 
-  for(let i = 0; i < data.length; i++){
+  for (let i = 0; i < data.length; i++) {
     let newCity = {
       city: data[0].city,
       date: dayjs(data[i].date),
-      temp : Math.round(data[i].temp),
+      temp: Math.round(data[i].temp),
       wind: data[i].wind,
       humidity: data[i].humidity,
       icon: data[i].icon,
       weatherInfo: data[i].weatherInfo,
-    }
+    };
     citiesArray.push(newCity);
-
   }
   cities = citiesArray;
 
@@ -66,13 +65,14 @@ function displayInfo(cityArray) {
     weatherContainer.style.backgroundImage = "url('./assets/img/clouds.jpg')";
   }
 
-  // Creating Current Day Container
+  // Storing Current Day Data
   const todayTemp = Math.round(cityArray[0].temp);
   const todayDate = dayjs(cityArray.date).format("ddd D MMM YYYY");
   const todayIconWeather = cityArray[0].icon;
   const todayWindSpeed = cityArray[0].wind;
   const todayHumidity = cityArray[0].humidity;
 
+  // Creating Current Day Container
   const currentDayContainer = document.createElement("article");
   currentDayContainer.classList.add(
     "col-12",
@@ -111,6 +111,7 @@ function displayInfo(cityArray) {
 </div>
 </div>`;
 
+  // Appending Current Day Container
   forecastContainer.appendChild(currentDayContainer);
 
   const fiveDayTitle = document.createElement("h2");
@@ -118,13 +119,19 @@ function displayInfo(cityArray) {
   fiveDayTitle.textContent = "5-day forecast:";
   forecastContainer.appendChild(fiveDayTitle);
 
-  const fiveDayContainer = document.createElement("article");
+  
+  // Creating 5-Day Forecast Containers
+  let fiveDayContainer = document.createElement("article");
+  fiveDayContainer = document.createElement("article");
   fiveDayContainer.classList.add("d-grid", "mt-2");
   fiveDayContainer.setAttribute("id", "forecast");
+
+  // Appending 5-Day Forecast Container
   forecastContainer.appendChild(fiveDayContainer);
 
   // Looping through the 5-day forecast to create each container
   for (let i = 1; i < cityArray.length; i++) {
+    // Storing each data of the 5-day forecast
     let forecastDate = dayjs(cityArray[i].date).format("ddd D MMM");
     let forecastTemp = Math.round(cityArray[i].temp);
     let forecastIconWeather = cityArray[i].icon;
@@ -151,6 +158,7 @@ function displayInfo(cityArray) {
     <p class="m-0">${forecastHumidity}%</p>
   </div>`;
 
+    // Appending each container of the 5-day forecast
     fiveDayContainer.appendChild(forecastDailyContainer);
   }
 }
@@ -190,7 +198,7 @@ function searchCity(event) {
                 humidity: data.list[j].main.humidity,
                 icon: `https://openweathermap.org/img/wn/${data.list[j].weather[0].icon}.png`,
                 weatherInfo: data.list[j].weather[0].main,
-              }
+              };
               cityArray.push(newCity);
 
               foundMatch = true;
@@ -212,28 +220,28 @@ function searchCity(event) {
   }
 }
 
-function renderCities(){
-  if(!cities){
+function renderCities() {
+  if (!cities) {
     return [];
   }
- for(let i = 0; i < cities.length; i+= 6){
-  createCityButton(cities[i].city);
- }
+  for (let i = 0; i < cities.length; i += 6) {
+    createCityButton(cities[i].city);
+  }
 }
-function displayCity(event){
-  const city = event.target.getAttribute('data-city');
-  console.log(cities);
+function displayCity(event) {
+  const city = event.target.getAttribute("data-city");
 
-  const filteredCities = cities.filter(item => item.city === city);
-console.log(filteredCities);
+  const filteredCities = cities.filter((item) => item.city === city);
+
   displayInfo(filteredCities);
 }
 
+// Handle information when writing a city in the input
 cityForm.addEventListener("submit", searchCity);
 
 // Handle displaying the information when clicking the city button
-citiesContainer.addEventListener("click", function(event){
-  if(event.target.classList.contains('btn-light')){
+citiesContainer.addEventListener("click", function (event) {
+  if (event.target.classList.contains("btn-light")) {
     displayCity(event);
   }
 });
