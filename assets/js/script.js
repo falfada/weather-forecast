@@ -22,8 +22,9 @@ function localStorageSave(data) {
       weatherInfo: data[i].weatherInfo,
     }
     citiesArray.push(newCity);
- 
+
   }
+  cities = citiesArray;
 
   localStorage.setItem("cities", JSON.stringify(citiesArray));
 }
