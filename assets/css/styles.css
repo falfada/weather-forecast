@@ -43,3 +43,21 @@
     right: -1rem;
     font-size: .8rem;
 }
+@media (max-width: 767.98px) {
+    #weather_container{
+        height: auto;
+    }
+    #citiesContainer{
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: .5rem;
+    }
+    #forecast{
+        grid-template-columns: 1fr;
+    }
+}
+@media (max-width: 575.98px) {
+    #citiesContainer{
+        grid-template-columns: 1fr;
+    }
+}

@@ -79,7 +79,7 @@ function displayInfo(cityArray) {
     "p-4",
     "glass_container",
     "rounded-3",
-    "row",
+    "d-flex",
     "shadow"
   );
   currentDayContainer.innerHTML = `<div class="col-7">
